@@ -128,7 +128,7 @@ app.use(function (req, res, next) {
 
 
 
-app.listen(8082, function () {  
+app.listen(process.env.PORT || 8082, function () {  
     
   console.log('Example app listening on port 8080!')  
  })

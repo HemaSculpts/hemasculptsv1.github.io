@@ -64,8 +64,13 @@ app.use(function (req, res, next) {
   res.send("getting data");
  });
 
- app.put("/api/postdata",function(req,res){
-  var rawdata = fs.readFileSync('output.json');
+ app.post("/api/postdata",function(req,res){
+  //var rawdata = fs.readFileSync('output.json');
+  var rawdata = [
+    {
+        "name": "SOUTH1",
+        "value": "Love u to the core"
+    }];
   var result = JSON.parse(rawdata.toString());
   //console.log("raw file:"+result[0].name);
   var mod = req.body;
@@ -81,7 +86,7 @@ app.use(function (req, res, next) {
     }
   });
   console.log(result);
-  fs.writeFile('output.json', JSON.stringify(result));
+  //fs.writeFile('output.json', JSON.stringify(result));
   //fs.close();
   res.send(mod);
  });

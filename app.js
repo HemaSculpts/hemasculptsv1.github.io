@@ -91,12 +91,22 @@ app.use(function (req, res, next) {
   res.send(mod);
  });
 
- /*app.put("/api/postdata",function(req,res){
+ app.put("/api/putdata",function(req,res){
+  var rawdata = fs.readFileSync('output.json');
+  var result = JSON.parse(rawdata.toString());
   var mod = req.body;
   console.log("Put method");
   console.log(mod);
+  result.forEach(function(i){
+    console.log("i.name & mod.name: "+i.name+" "+mod.name);
+    if(i.name==mod.name)
+    {
+      i.value= mod.value;
+    }
+  });
+  fs.writeFile('myjsonfile.json', JSON.stringify(result), 'utf8');
   res.send(mod);
- });*/
+ });
 
  /*
  app.post("/api/testpost",function(req,res){   
@@ -135,7 +145,7 @@ app.use(function (req, res, next) {
 
 app.listen(process.env.PORT || 8082, function () {  
     
-  console.log('Example app listening on port 8080!')  
+  console.log('Example app listening on port 8082!')  
  })
 
 

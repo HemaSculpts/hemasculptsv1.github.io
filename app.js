@@ -147,7 +147,7 @@ app.use(function (req, res, next) {
  
 
  
- app.post("/api/postdbdata",function(req,res){
+ app.put("/api/postdbdata",function(req,res){
   console.log('in');
 
   var mod = req.body;
@@ -175,7 +175,7 @@ app.use(function (req, res, next) {
             res.send(err);         
             }  
             else{
-                   res.send({data:"Record has been Updated..!!"});  
+                   res.send(req.body);  
               }  
           });  
 

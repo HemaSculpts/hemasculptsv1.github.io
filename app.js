@@ -6,6 +6,7 @@ var logger = require('morgan');
 var http = require('http');
 var fs = require('fs');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 
 
 /*
@@ -108,14 +109,97 @@ app.use(function (req, res, next) {
   res.send(mod);
  });
 
- /*
- app.post("/api/testpost",function(req,res){   
+ 
+ var url = 'mongodb+srv://prakashinfo96:kambatham@prakash-367nr.mongodb.net/test';
+ 
+ var Schema = mongoose.Schema;
+
+ var UsersSchema = new Schema({      
+  name: { type: String   },       
+  value: { type: String   }   
+ },{ versionKey: false }); 
+
+ var model = mongoose.model('spanvalues', UsersSchema);
+
+ var db = mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify:false },function(err, db) {
+     if(err)
+    {
+        console.log(err);
+    }
+    else{
+      console.log('Connected to ' + db);
+      
+    }
+ }); 
+
+ app.get("/api/getdbdata",function(req,res){
+  model.find({},function(err,data){
+    if(err){  
+      console.log(err);
+    }  
+    else{                
+        console.log(data);
+        res.send(data);
+        }  
+});    
+
+});
+ 
+
+ 
+ app.post("/api/postdbdata",function(req,res){
   console.log('in');
 
   var mod = req.body;
   console.log(mod);
+  var found;
+
+  model.find({"name":mod[0].name},function(err,data){
+    if(err){  
+      console.log(err);
+    }
+    if(!data)
+    {
+      console.log("No data")
+    }
+    else{
+        console.log(data);
+        found = data;
+        console.log('found data:'+found);
+        if(found.length>0)
+        {
+          console.log("Update record");
+          model.findOneAndUpdate({"name":mod[0].name}, { value: mod[0].value},  
+            function(err,data) {
+            if (err) {  
+            res.send(err);         
+            }  
+            else{
+                   res.send({data:"Record has been Updated..!!"});  
+              }  
+          });  
+
+        }
+        else{
+          console.log("Create a record");
+          var newRecord = new model({ name: mod[0].name, value: mod[0].value });
+          newRecord.save(function(err,data){
+            if(err){  
+               res.send(err);                
+            }  
+            else{        
+                res.send({data:"Record has been Inserted..!!"});  
+            }  
+       });
+
+        }
+        //res.send(found);
+        }
+});
+
+ /*
   if(req.body.mode =="Save")  
-  {  
+  {
      mod.save(function(err,data){  
        if(err){  
           res.send(err);                
@@ -126,7 +210,7 @@ app.use(function (req, res, next) {
   });  
  }  
  else   
- {  
+ { 
   model.findByIdAndUpdate(req.body.id, { name: req.body.name, address: req.body.address},  
     function(err,data) {  
     if (err) {  
@@ -135,11 +219,10 @@ app.use(function (req, res, next) {
     else{        
            res.send({data:"Record has been Updated..!!"});  
       }  
-  });  
-   
-   
- }  
-  }) */
+  });    
+ } */
+
+  })
 
 
 
